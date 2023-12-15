@@ -1,7 +1,13 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import React from "react";
 
-const TodoCard = ({ data, setTodos }) => {
+export default function TodoCard({ data, setTodos }) {
   const handleComplete = (item) => {
     const newTodos = data.map((todo, index) => {
       if (todo.id === item.id) {
@@ -21,35 +27,35 @@ const TodoCard = ({ data, setTodos }) => {
   };
 
   return (
-    <View style={{ width: "100%", gap: 8 }}>
+    <ScrollView style={styles.container}>
       {data.map((item, index) => (
         <View
           key={index}
-          style={{
-            flexDirection: "row",
-            height: 50,
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            borderRadius: 10,
-            backgroundColor: item.isCompleted
-              ? "lightgreen"
-              : index % 2 == 0
-              ? "#E9E9E9"
-              : "#F5F5F5",
-          }}
+          style={[
+            styles.itemContainer,
+            {
+              backgroundColor: item.isCompleted
+                ? "lightgreen"
+                : index % 2 == 0
+                ? "#E9E9E9"
+                : "#F5F5F5",
+            },
+          ]}
         >
           <TouchableOpacity
             onPress={() => handleComplete(item)}
-            style={{ width: "80%" }}
+            style={styles.touchableContainer}
             key={index}
           >
             <Text
-              style={{
-                fontSize: 14,
-                fontWeight: "900",
-                textDecorationLine: item.isCompleted ? "line-through" : "none",
-              }}
+              style={[
+                styles.itemText,
+                {
+                  textDecorationLine: item.isCompleted
+                    ? "line-through"
+                    : "none",
+                },
+              ]}
             >
               {item.text}
             </Text>
@@ -64,25 +70,43 @@ const TodoCard = ({ data, setTodos }) => {
             onPress={() => {
               handleDelete(item);
             }}
-            style={{
-              width: "20%",
-            }}
+            style={styles.buttonContainer}
           >
-            <Text
-              style={{
-                color: "red",
-                textAlign: "center",
-                fontSize: 14,
-                fontWeight: "900",
-              }}
-            >
-              Delete
-            </Text>
+            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
         </View>
       ))}
-    </View>
+    </ScrollView>
   );
-};
+}
 
-export default TodoCard;
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    marginTop: 12,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 8,
+  },
+  touchableContainer: {
+    width: "80%",
+  },
+  itemText: {
+    fontSize: 14,
+    fontWeight: "900",
+  },
+  buttonContainer: {
+    width: "20%",
+  },
+  buttonText: {
+    fontSize: 14,
+    fontWeight: "900",
+    color: "red",
+  },
+});
